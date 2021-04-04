@@ -7,8 +7,8 @@ class Motor {
   public:
     Motor();
 
-    void ccw(int pwm); // 正転（反時計回り）
-    void cw(int pwm); // 逆転（時計回り）
+    void forward(int pwm); // 前進
+    void back(int pwm); // 後退
     void stop(); // 停止
 
   private:

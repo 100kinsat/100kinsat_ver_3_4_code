@@ -21,33 +21,13 @@ void setup() {
 }
 
 void loop() {
-  // 正転
-  digitalWrite(motorA[0], LOW);
-  digitalWrite(motorA[1], HIGH);
-  ledcWrite(CHANNEL_A, 80);
-  
-  digitalWrite(motorB[0], LOW);
-  digitalWrite(motorB[1], HIGH);
-  ledcWrite(CHANNEL_B, 80);
-  
-  delay(1000);
-
-  // 停止
-  digitalWrite(motorA[0], LOW);
-  digitalWrite(motorA[1], LOW);
-  ledcWrite(CHANNEL_A, HIGH);
-  
-  digitalWrite(motorB[0], LOW);
-  digitalWrite(motorB[1], LOW);
-  ledcWrite(CHANNEL_B, HIGH);
-  
-  delay(1000);
-
-  // 逆転
+  // 前進
+  // 左モータ（CCW，反時計回り）
   digitalWrite(motorA[1], LOW);
   digitalWrite(motorA[0], HIGH);
   ledcWrite(CHANNEL_A, 80);
-  
+
+  // 右モータ（CW，時計回り）
   digitalWrite(motorB[1], LOW);
   digitalWrite(motorB[0], HIGH);
   ledcWrite(CHANNEL_B, 80);
@@ -55,10 +35,38 @@ void loop() {
   delay(1000);
 
   // 停止
+  // 左モータ停止
   digitalWrite(motorA[0], LOW);
   digitalWrite(motorA[1], LOW);
   ledcWrite(CHANNEL_A, HIGH);
 
+  // 右モータ停止
+  digitalWrite(motorB[0], LOW);
+  digitalWrite(motorB[1], LOW);
+  ledcWrite(CHANNEL_B, HIGH);
+  
+  delay(1000);
+
+  // 後退
+  // 左モータ（CW，時計回り）
+  digitalWrite(motorA[0], LOW);
+  digitalWrite(motorA[1], HIGH);
+  ledcWrite(CHANNEL_A, 80);
+
+  // 右モータ（CCW，反時計回り）
+  digitalWrite(motorB[0], LOW);
+  digitalWrite(motorB[1], HIGH);
+  ledcWrite(CHANNEL_B, 80);
+  
+  delay(1000);
+
+  // 停止
+  // 左モータ停止
+  digitalWrite(motorA[0], LOW);
+  digitalWrite(motorA[1], LOW);
+  ledcWrite(CHANNEL_A, HIGH);
+
+  // 右モータ
   digitalWrite(motorB[0], LOW);
   digitalWrite(motorB[1], LOW);
   ledcWrite(CHANNEL_B, HIGH);
