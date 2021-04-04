@@ -13,31 +13,46 @@ Motor::Motor() {
   ledcAttachPin(motorB[2], CHANNEL_B);
 }
 
-void Motor::ccw(int pwm) {
-  digitalWrite(motorA[0], LOW);
-  digitalWrite(motorA[1], HIGH);
-  ledcWrite(CHANNEL_A, pwm);
-  
-  digitalWrite(motorB[0], LOW);
-  digitalWrite(motorB[1], HIGH);
-  ledcWrite(CHANNEL_B, pwm);
-}
-
-void Motor::cw(int pwm) {
+/**
+ * 前進
+ */
+void Motor::forward(int pwm) {
+  // 左モータ（CCW，反時計回り）
   digitalWrite(motorA[1], LOW);
   digitalWrite(motorA[0], HIGH);
   ledcWrite(CHANNEL_A, pwm);
-  
+
+  // 右モータ（CW，時計回り）
   digitalWrite(motorB[1], LOW);
   digitalWrite(motorB[0], HIGH);
   ledcWrite(CHANNEL_B, pwm);
 }
 
+/**
+ * 後退
+ */
+void Motor::back(int pwm) {
+  // 左モータ（CW，時計回り）
+  digitalWrite(motorA[0], LOW);
+  digitalWrite(motorA[1], HIGH);
+  ledcWrite(CHANNEL_A, pwm);
+
+  // 右モータ（CCW，反時計回り）
+  digitalWrite(motorB[0], LOW);
+  digitalWrite(motorB[1], HIGH);
+  ledcWrite(CHANNEL_B, pwm);
+}
+
+/**
+ * 停止
+ */
 void Motor::stop() {
+  // 左モータ停止
   digitalWrite(motorA[0], LOW);
   digitalWrite(motorA[1], LOW);
   ledcWrite(CHANNEL_A, HIGH);
-  
+
+  // 右モータ停止
   digitalWrite(motorB[0], LOW);
   digitalWrite(motorB[1], LOW);
   ledcWrite(CHANNEL_B, HIGH);

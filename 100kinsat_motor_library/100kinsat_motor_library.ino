@@ -6,13 +6,13 @@ void setup() {
 }
 
 void loop() {
-  motor.ccw(80);
+  motor.forward(100);
   delay(1000);
 
   motor.stop();
   delay(1000);
 
-  motor.cw(80);
+  motor.back(100);
   delay(1000);
 
   motor.stop();
