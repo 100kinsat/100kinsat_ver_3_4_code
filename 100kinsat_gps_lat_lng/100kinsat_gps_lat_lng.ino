@@ -2,7 +2,7 @@
 
 static const uint32_t GPSBaud = 9600;
 TinyGPSPlus gps;
-HardwareSerial ss(0);
+HardwareSerial ss(2);
 
 void setup() {
   Serial.begin(115200);
@@ -17,7 +17,7 @@ void loop() {
     gps.encode(c);
     if(gps.location.isUpdated()){
       Serial.print("Lat=\t");   Serial.print(gps.location.lat(), 6);
-      Serial.print("Lng=\t");   Serial.print(gps.location.lng(), 6);
+      Serial.print(" Lng=\t");   Serial.println(gps.location.lng(), 6);
     }
   }
 }
