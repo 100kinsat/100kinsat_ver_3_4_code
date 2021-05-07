@@ -5,5 +5,6 @@ enum {
   ST_LED = 0,
   ST_GPS,
   ST_IMU,
+  ST_SD,
   ST_END,
 };
