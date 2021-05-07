@@ -6,5 +6,6 @@ enum {
   ST_GPS,
   ST_IMU,
   ST_SD,
+  ST_MOTOR,
   ST_END,
 };
