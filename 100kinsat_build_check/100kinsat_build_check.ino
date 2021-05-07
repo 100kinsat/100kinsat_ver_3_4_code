@@ -1,5 +1,6 @@
 #include <TinyGPS++.h>
 
+#include "cansat_sd.hpp"
 #include "cansat_status.hpp"
 #include "mpu9250.h"
 #include "speaker.hpp"
@@ -14,6 +15,8 @@ TinyGPSPlus gps;
 HardwareSerial ss(2);
 
 Mpu9250 imu(&Wire, 0x68);
+
+CanSatSd sd = CanSatSd();
 
 void setup() {
   Serial.begin(115200);
@@ -53,6 +56,11 @@ void loop() {
       Serial.println("\r\n***9軸センサモード***");
       Serial.println("9軸センサの値を表示します．");
       display_imu_value();
+      break;
+
+    case ST_SD:
+      Serial.println("\r\n***SDカードモード***");
+      read_write_sd();
       break;
 
     default:
@@ -111,3 +119,14 @@ void display_imu_value() {
     }
   }
 }
+
+/**
+ * @brief SDカードの動作確認
+ */
+void read_write_sd() {
+  sd.writeFile(SD, "/cansat_test.txt", "Hello ");
+  sd.appendFile(SD, "/cansat_test.txt", "CanSat!\n");
+  while (state == ST_SD) {
+  }
+}
+
