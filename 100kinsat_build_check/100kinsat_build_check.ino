@@ -1,6 +1,7 @@
 #include <TinyGPS++.h>
-
-#include "cansat_sd.hpp"
+#include "FS.h"
+#include "SD.h"
+#include "SPI.h"
 #include "cansat_status.hpp"
 #include "mpu9250.h"
 #include "speaker.hpp"
@@ -15,8 +16,6 @@ TinyGPSPlus gps;
 HardwareSerial ss(2);
 
 Mpu9250 imu(&Wire, 0x68);
-
-CanSatSd sd = CanSatSd();
 
 const int motorA[3] = {4, 13, 25};   // AIN1, AIN2, PWMA
 const int motorB[3] = {14, 27, 26};  // BIN1, BIN2, PWMB
@@ -34,6 +33,32 @@ void setup() {
   Serial.println("100kinSATのスイッチをクリックしてモードを切り替えます．");
   // GPSとの通信の初期化
   ss.begin(9600);
+
+  // SDカードの初期化
+    if (!SD.begin()) {
+    Serial.println("Card Mount Failed");
+    return;
+  }
+  uint8_t cardType = SD.cardType();
+
+  if (cardType == CARD_NONE) {
+    Serial.println("No SD card attached");
+    return;
+  }
+
+  Serial.print("SD Card Type: ");
+  if (cardType == CARD_MMC) {
+    Serial.println("MMC");
+  } else if (cardType == CARD_SD) {
+    Serial.println("SDSC");
+  } else if (cardType == CARD_SDHC) {
+    Serial.println("SDHC");
+  } else {
+    Serial.println("UNKNOWN");
+  }
+
+  uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+  Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
   // タクトスイッチとLED
   pinMode(button, INPUT);
@@ -88,8 +113,8 @@ void loop() {
 
     case ST_MOTOR:
       Serial.println("\r\n***モータモード***");
-      motor_test(100, 2000);
-      motor_test(200, 1000);
+      motor_test(100, 5000);
+      motor_test(200, 5000);
       break;
 
     default:
@@ -153,10 +178,48 @@ void display_imu_value() {
  * @brief SDカードの動作確認
  */
 void read_write_sd() {
-  sd.writeFile(SD, "/cansat_test.txt", "Hello ");
-  sd.appendFile(SD, "/cansat_test.txt", "CanSat!\n");
+  writeFile(SD, "/cansat_test.txt", "Hello ");
+  appendFile(SD, "/cansat_test.txt", "CanSat!\n");
   while (state == ST_SD) {
   }
+}
+
+/**
+ * SDカードに新規書き込みする
+ */
+ void writeFile(fs::FS &fs, const char *path, const char *message) {
+  Serial.printf("Writing file: %s\n", path);
+
+  File file = fs.open(path, FILE_WRITE);
+  if (!file) {
+    Serial.println("Failed to open file for writing");
+    return;
+  }
+  if (file.print(message)) {
+    Serial.println("File written");
+  } else {
+    Serial.println("Write failed");
+  }
+  file.close();
+}
+
+/**
+ * SDカードに追記する
+ */
+void appendFile(fs::FS &fs, const char *path, const char *message) {
+  Serial.printf("Appending to file: %s\n", path);
+
+  File file = fs.open(path, FILE_APPEND);
+  if (!file) {
+    Serial.println("Failed to open file for appending");
+    return;
+  }
+  if (file.print(message)) {
+    Serial.println("Message appended");
+  } else {
+    Serial.println("Append failed");
+  }
+  file.close();
 }
 
 /**
