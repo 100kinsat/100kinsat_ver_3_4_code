@@ -12,7 +12,7 @@ class Motor {
     void stop(); // 停止
 
   private:
-    const int motorA[3] = {4, 13, 25}; // AIN1, AIN2, PWMA
+    const int motorA[3] = {13, 4, 25}; // AIN1, AIN2, PWMA
     const int motorB[3] = {14, 27, 26}; // BIN1, BIN2, PWMB
 
     const int CHANNEL_A = 0;
